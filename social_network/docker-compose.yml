@@ -12,7 +12,10 @@ services:
       - db
     env_file:
       - .env
-    entrypoint: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    entrypoint: >
+      bash -c "python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
 
   db:
     image: postgres
@@ -25,28 +28,28 @@ services:
     env_file:
       - .env
 
-  celery:
-    image: socialnetwork
-    command: celery -A social_network.celery worker -l info
-    env_file:
-      - .env
-    depends_on:
-      - rabbitmq
+  # celery:
+  #   image: socialnetwork
+  #   command: celery -A social_network.celery worker -l info
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - rabbitmq
 
-  redis:
-    image: redis:7-alpine
-    restart: always
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis:7-alpine
+  #   restart: always
+  #   ports:
+  #     - 6379:6379
 
-  rabbitmq:
-    image: rabbitmq:3.11-management
-    restart: always
-    ports:
-      - 5672:5672
-      - 15672:15672
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
-    env_file:
-      - .env
+  # rabbitmq:
+  #   image: rabbitmq:3.11-management
+  #   restart: always
+  #   ports:
+  #     - 5672:5672
+  #     - 15672:15672
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+  #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+  #   env_file:
+  #     - .env
