@@ -1,4 +1,4 @@
-## Unzip env.zip
+## Unzip env.zip (password: secret)
 ```sh
 unzip env.zip
 ```
